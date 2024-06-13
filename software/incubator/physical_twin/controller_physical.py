@@ -3,10 +3,13 @@ import sys
 from datetime import datetime
 import logging
 
+
+
 from incubator.communication.server.rabbitmq import Rabbitmq, ROUTING_KEY_STATE, ROUTING_KEY_HEATER, ROUTING_KEY_FAN, \
     from_ns_to_s, ROUTING_KEY_CONTROLLER
 from incubator.communication.shared.protocol import ROUTING_KEY_UPDATE_CLOSED_CTRL_PARAMS
 from incubator.models.controller_models.controller_model_sm import ControllerModel4SM
+from incubator.models.controller_models.nn_controller_model_sm import NNControllerModel4SM
 
 
 class ControllerPhysical:
@@ -19,7 +22,7 @@ class ControllerPhysical:
 
         self.heater_ctrl = None
         self.fan_ctrl = None
-        self.state_machine = ControllerModel4SM(temperature_desired, lower_bound, heating_time, heating_gap)
+        self.state_machine = NNControllerModel4SM(temperature_desired, lower_bound, heating_time, heating_gap)
 
         self.rabbitmq = Rabbitmq(**rabbit_config)
 
