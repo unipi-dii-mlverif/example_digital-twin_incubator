@@ -33,12 +33,12 @@ print(device)
 
 dataset = pd.read_csv("../datasets/20230501_calibration_empty_system/20230501_calibration_empty_system.csv")
 
-DESIRED_UL_TEMPERATURE = 35
-DESIRED_LL_TEMPERATURE = 30
+DESIRED_UL_TEMPERATURE = 38
+DESIRED_LL_TEMPERATURE = DESIRED_UL_TEMPERATURE-2
 
 
-Xdata = (dataset[["t1", "t2", "t3"]]).values
-Ydata = (dataset[["heater_on", "fan_on"]]).values
+Xdata = (dataset[["average_temperature"]]).values
+Ydata = (dataset[["heater_on"]]).values
 
 model.to(device) 
 print(model)
@@ -59,10 +59,10 @@ ll_tensor = (torch.ones([len(Xdata),1])*DESIRED_LL_TEMPERATURE).to(device)
 X_train, X_test, y_train, y_test = train_test_split(Xdata, Ydata, train_size=0.80, shuffle=True, random_state=9999)
 X_train = torch.tensor(X_train, dtype=torch.float32).to(device)
 
-#X_train = torch.hstack((X_train, ul_tensor[0:len(X_train)], ll_tensor[0:len(X_train)]))
+X_train = torch.hstack((X_train, ul_tensor[0:len(X_train)], ll_tensor[0:len(X_train)]))
 y_train = torch.FloatTensor(y_train).to(device)
 X_test = torch.tensor(X_test, dtype=torch.float32).to(device)
-#X_test = torch.hstack((X_test, ul_tensor[0:len(X_test)], ll_tensor[0:len(X_test)]))
+X_test = torch.hstack((X_test, ul_tensor[0:len(X_test)], ll_tensor[0:len(X_test)]))
 y_test = torch.FloatTensor(y_test).to(device)
 
 
