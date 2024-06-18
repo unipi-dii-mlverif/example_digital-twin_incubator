@@ -31,9 +31,9 @@ class NNControllerModel4SM:
         
 
     def step(self, time, in_temperature):
-        predicted = self.nn(torch.Tensor([in_temperature, in_temperature, in_temperature]))
+        predicted = self.nn(torch.Tensor([in_temperature, self.temperature_desired, self.temperature_desired-self.lower_bound]))
+        print(predicted)
         heat_on = predicted[0].item() > 0.5
-        fan_on  = predicted[0].item() > 0.5
         if self.current_state == "CoolingDown":
             assert self.cached_heater_on is False
             if heat_on:

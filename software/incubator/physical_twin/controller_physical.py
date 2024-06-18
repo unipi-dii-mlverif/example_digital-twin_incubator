@@ -23,7 +23,7 @@ class ControllerPhysical:
         self.heater_ctrl = None
         self.fan_ctrl = None
         self.state_machine = NNControllerModel4SM(temperature_desired, lower_bound, heating_time, heating_gap)
-
+        print(self.state_machine)
         self.rabbitmq = Rabbitmq(**rabbit_config)
 
         self.header_written = False
